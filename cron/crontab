@@ -1,0 +1,1 @@
+*/1 * * * * curl http://app:3000/api/cron  >> /var/log/cron.log 2>&1

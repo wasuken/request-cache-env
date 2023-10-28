@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./src:/app
+      - node_modules:/app/node_modules
+    command: sh -c "npm run dev"
+    networks:
+      - my_network
+  cron:
+    build:
+      context: ./cron
+    networks:
+      - my_network
+  studio:
+    image: node:18.12-alpine
+    working_dir: /app
+    user: node
+    ports:
+      - "5555:5555"
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./src:/app
+      - node_modules:/app/node_modules
+    command: sh -c "npx prisma studio"
+
+volumes:
+  node_modules:
+
+networks:
+  my_network:
+    driver: bridge
