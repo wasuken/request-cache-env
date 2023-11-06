@@ -11,7 +11,24 @@ services:
     volumes:
       - ./src:/app
       - node_modules:/app/node_modules
-    command: sh -c "npm run dev"
+    # command: sh -c "npm run build && npm start"
+    # command: sh -c "npm run build && npm start"
+    # command: sh -c "npm run dev"
+    depends_on:
+      - mysql
+    networks:
+      - my_network
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: rcache
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+    restart: always
     networks:
       - my_network
   cron:
@@ -19,18 +36,16 @@ services:
       context: ./cron
     networks:
       - my_network
-  studio:
-    image: node:18.12-alpine
-    working_dir: /app
-    user: node
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
     ports:
-      - "5555:5555"
+      - 8080:80
     environment:
-      TZ: "Asia/Tokyo"
-    volumes:
-      - ./src:/app
-      - node_modules:/app/node_modules
-    command: sh -c "npx prisma studio"
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=mysql
 
 volumes:
   node_modules:
