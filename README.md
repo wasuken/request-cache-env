@@ -1,4 +1,4 @@
-# 最初にやること
+# 環境構築
 
 ## 1. compose.yml
 
@@ -13,3 +13,10 @@ $ cp compose.yml.template compose.yml
 ```conf
 DATABASE_URL="..."
 ```
+
+必要なら.env.test,.env.development,.env.production 等を配置する。
+
+## 課題
+
+- 初期セットアップ時に prisma migrate したい。
+- .env.\*系にあわせたスクリプトをかく。
