@@ -1,0 +1,6 @@
+/.env*
+!/.env.template
+/init/*
+/dumps/*
+!/init/init.sql
+!/dumps/.gitkeep
